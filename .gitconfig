@@ -2,6 +2,6 @@
 	name = asgilliard
 	email = feanormind@gmail.com
 [core]
-	excludesfile = /Users/feanorandcroun/.gitignore-global
+	excludesfile = /Users/asgilliard/.gitignore-global
 [init]
 	defaultBranch = main

@@ -1,5 +1,23 @@
 // Zed settings
 {
+  "agent": {
+    "model_parameters": [],
+    "default_model": {
+      "provider": "zed.dev",
+      "model": "claude-3-7-sonnet-latest"
+    }
+  },
+  "edit_predictions": {
+    "mode": "eager",
+    "copilot": {
+      "proxy": null,
+      "proxy_no_verify": null
+    },
+    "enabled_in_text_threads": false
+  },
+  "features": {
+    "edit_prediction_provider": "zed"
+  },
   "vim_mode": false,
   "telemetry": {
     "diagnostics": false,
@@ -14,19 +32,19 @@
   "theme": {
     "mode": "system",
     "light": "Gruvbox Light Soft",
-    "dark": "Catppuccin Mocha - No Italics"
+    "dark": "Terafox - blurred"
   },
   "soft_wrap": "editor_width",
-  "hover_popover_enabled": false,
+  "hover_popover_enabled": true,
   "hover_popover_delay": 70,
   "use_system_path_prompts": false,
   "use_system_prompts": false,
-  "show_completions_on_input": false,
-  "show_completion_documentation": false,
-  "show_edit_predictions": true,
+  "show_completions_on_input": true,
+  "show_completion_documentation": true,
+  "show_edit_predictions": false,
   "format_on_save": "on",
   "formatter": "language_server",
-  "auto_signature_help": false,
+  "auto_signature_help": true,
   "show_signature_help_after_edits": false,
   "toolbar": {
     "breadcrumbs": true,
@@ -43,7 +61,7 @@
   "remove_trailing_whitespace_on_save": false,
   "ensure_final_newline_on_save": true,
   "inlay_hints": {
-    "enabled": false
+    "enabled": true
   },
   "collaboration_panel": {
     "button": false
@@ -63,8 +81,7 @@
   "languages": {
     "Python": {
       "language_servers": [
-        "!pyright"
-        //"..."
+        "pyright"
       ],
       "tab_size": 4,
       "preferred_line_length": 88
