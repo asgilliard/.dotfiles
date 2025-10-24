@@ -26,7 +26,7 @@ alias config='$(which git) --git-dir=$HOME/.dotfiles/.git --work-tree=$HOME'
 
 config config --local status.showUntrackedFiles no
 
-config restore .
+config checkout -f
 ```
 
 ### Commiting changes:
