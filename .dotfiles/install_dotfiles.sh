@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-REMOTE_URL="https://github.com/asgilliard/.dotfiles.git"
+REMOTE_URL="git@github.com:asgilliard/.dotfiles.git"
 
 echo "Setting up dotfiles..."
 
