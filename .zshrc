@@ -30,12 +30,7 @@ export LC_ALL=en_US.UTF-8
 
 # Aliases
 alias la='ls -lA'
-
-if [[ "$TERM_PROGRAM" == "alacritty" ]]; then
-  alias ls="eza --tree --level=1 --icons=always"
-else
-  alias ls="eza --tree --level=1"
-fi
+alias ls="eza --tree --level=1 --icons=always"
 
 alias cd='z'
 alias helix='hx'
