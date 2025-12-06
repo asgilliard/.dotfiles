@@ -1,0 +1,12 @@
+[
+  {
+    "label": "ruff format",
+    "command": "ruff format .",
+    "hide": "always"
+  },
+  {
+    "label": "ruff check",
+    "command": "ruff check . --fix",
+    "hide": "on_success"
+  }
+]

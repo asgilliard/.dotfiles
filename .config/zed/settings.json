@@ -1,0 +1,108 @@
+// Zed settings
+{
+    "minimap": {
+        "show": "always"
+    },
+    "tab_size": 4,
+    "linked_edits": false,
+    "inline_code_actions": false,
+    "current_line_highlight": "none",
+    "rounded_selection": false,
+    "selection_highlight": false,
+    "cursor_shape": "bar",
+    "agent": {
+        "default_model": {
+            "provider": "zed.dev",
+            "model": "claude-sonnet-4"
+        },
+        "model_parameters": []
+    },
+    "language_models": {
+        "ollama": {
+            "api_url": "http://localhost:11434"
+        }
+    },
+    "edit_predictions": {
+        "mode": "eager",
+        "copilot": {
+            "proxy": null,
+            "proxy_no_verify": null
+        },
+        "enabled_in_text_threads": false
+    },
+    "features": {
+        "edit_prediction_provider": "zed"
+    },
+    "vim_mode": false,
+    "telemetry": {
+        "diagnostics": false,
+        "metrics": false
+    },
+    "base_keymap": "VSCode",
+    "buffer_font_family": "MesloLGL Nerd Font",
+    "ui_font_family": "MesloLGS Nerd Font Mono",
+    "buffer_font_size": 14,
+    "ui_font_size": 14,
+    "theme": {
+        "mode": "system",
+        "light": "Tokyo Night Light",
+        "dark": "Rosé Pine"
+    },
+    "soft_wrap": "editor_width",
+    "hover_popover_enabled": true,
+    "hover_popover_delay": 70,
+    "use_system_path_prompts": false,
+    "use_system_prompts": false,
+    "show_completions_on_input": true,
+    "show_completion_documentation": false,
+    "show_edit_predictions": false,
+    "format_on_save": "on",
+    "formatter": "language_server",
+    "auto_signature_help": false,
+    "show_signature_help_after_edits": false,
+    "toolbar": {
+        "agent_review": false,
+        "breadcrumbs": true,
+        "quick_actions": false,
+        "selections_menu": false
+    },
+    "scrollbar": {
+        "selected_symbol": false,
+        "selected_text": false,
+        "show": "auto",
+        "diagnostics": "error"
+    },
+    "search": {
+        "regex": true
+    },
+    "remove_trailing_whitespace_on_save": false,
+    "ensure_final_newline_on_save": true,
+    "inlay_hints": {
+        "show_value_hints": false,
+        "enabled": false
+    },
+    "collaboration_panel": {
+        "button": false
+    },
+    "notification_panel": {
+        "button": false
+    },
+    "auto_update": false,
+    "terminal": {
+        "env": {
+            "TERM_PROGRAM": "zed"
+        },
+        "toolbar": {
+            "breadcrumbs": false
+        }
+    },
+    "languages": {
+        "Python": {
+            "show_edit_predictions": false,
+            "language_servers": [
+                "!pyright",
+                "ruff"
+            ]
+        }
+    }
+}
