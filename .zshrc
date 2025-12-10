@@ -5,19 +5,13 @@ source ~/.zcomet/bin/zcomet.zsh
 zcomet load zsh-users/zsh-autosuggestions
 zcomet load zsh-users/zsh-syntax-highlighting  
 
-# starship prompt
-eval "$(starship init zsh)"
-
 # Paths
 export PATH="\
-/opt/local/libexec/qt5/bin:\
-/opt/local/libexec/llvm-19/bin:\
 $HOME/.cargo/bin:\
 $HOME/.local/bin:\
 /opt/local/bin:\
 /opt/local/sbin:\
 /opt/local/libexec/gnubin:\
-/opt/local/lib/postgresql17/bin:\
 /usr/local/bin:\
 /usr/local/sbin:\
 /usr/bin:\
@@ -25,6 +19,9 @@ $HOME/.local/bin:\
 /usr/sbin:\
 /sbin:\
 /opt/X12/bin"
+
+# starship prompt
+eval "$(starship init zsh)"
 
 # Locales
 export LANG=en_US.UTF-8
@@ -36,8 +33,6 @@ alias ls="eza --tree --level=1 --icons=always"
 
 alias cd='z'
 alias helix='hx'
-
-alias config='$(which git) --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME'
 
 # History setup
 HISTFILE=$HOME/.zhistory
