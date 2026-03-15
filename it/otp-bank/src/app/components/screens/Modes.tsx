@@ -6,7 +6,7 @@ import { SectionLabel } from '../common/SectionLabel';
 
 const F = { fontFamily: "'Onest', sans-serif" };
 
-type ModeType = 'economy' | 'savings' | 'analytics';
+type ModeType = 'economy' | 'savings' | 'analytics' | 'health';
 
 export function Modes() {
     const navigate = useNavigate();
@@ -16,6 +16,7 @@ export function Modes() {
         { id: 'economy', label: 'Экономия' },
         { id: 'savings', label: 'Накопления' },
         { id: 'analytics', label: 'Анализ' },
+        { id: 'health', label: 'Здоровье' },
     ];
 
     return (
@@ -462,6 +463,138 @@ function AnalyticsMode() {
                             </div>
                         ))}
                     </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+/* ── HEALTH ─────────────────────────────────── */
+const DAYS = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+
+const HABITS = [
+  {
+    id: 'smoking', label: 'Курение', emoji: '🚬', type: 'bad' as const,
+    description: 'Дней без сигарет', unit: 'дней',
+  },
+  {
+    id: 'alcohol', label: 'Алкоголь', emoji: '🍺', type: 'bad' as const,
+    description: 'Дней без алкоголя', unit: 'дней',
+  },
+  {
+    id: 'sport', label: 'Спорт', emoji: '🏋️', type: 'good' as const,
+    description: 'Тренировок на этой неделе', unit: 'из 3',
+  },
+  {
+    id: 'water', label: 'Вода', emoji: '💧', type: 'good' as const,
+    description: 'Норма 2л в день', unit: 'из 7',
+  },
+  {
+    id: 'sleep', label: 'Сон', emoji: '😴', type: 'good' as const,
+    description: '8 часов сна', unit: 'из 7',
+  },
+];
+
+function HealthMode() {
+    // week grid state: habitId → Set of day indices checked
+    const [checked, setChecked] = useState<Record<string, Set<number>>>(() =>
+        Object.fromEntries(HABITS.map(h => [h.id, new Set<number>(
+            h.type === 'bad'
+                ? [0, 1, 3, 5, 6]  // отмечаем дни БЕЗ вредной привычки
+                : [1, 3, 5]        // отмечаем дни С полезной привычкой
+        )]))
+    );
+    const [streak, setStreak] = useState<Record<string, number>>({
+        smoking: 12, alcohol: 5, sport: 0, water: 0, sleep: 0
+    });
+
+    const toggle = (habitId: string, dayIdx: number) => {
+        setChecked(prev => {
+            const next = new Set(prev[habitId]);
+            next.has(dayIdx) ? next.delete(dayIdx) : next.add(dayIdx);
+            return { ...prev, [habitId]: next };
+        });
+    };
+
+    return (
+        <div className="mt-6 pb-6 px-6 space-y-3">
+            {/* Streak summary */}
+            <div className="bg-[#141414] rounded-2xl p-4 flex gap-3">
+                <div className="text-3xl">🔥</div>
+                <div>
+                    <div className="text-[14px] font-bold text-[#F5F5F5]" style={F}>Без сигарет уже {streak.smoking} дней</div>
+                    <div className="text-[12px] text-[#555] mt-0.5" style={F}>Продолжай — это твой рекорд</div>
+                </div>
+            </div>
+
+            {HABITS.map(habit => {
+                const days = checked[habit.id];
+                const count = days.size;
+                const isBad = habit.type === 'bad';
+                const accentColor = isBad ? '#E05252' : '#C2FF02';
+                const goodColor = isBad ? '#3A7D44' : '#C2FF02';
+
+                return (
+                    <div key={habit.id} className="bg-[#141414] rounded-2xl p-4">
+                        <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                                <span className="text-xl">{habit.emoji}</span>
+                                <div>
+                                    <div className="text-[14px] font-bold text-[#F5F5F5]" style={F}>{habit.label}</div>
+                                    <div className="text-[11px] text-[#555]" style={F}>{habit.description}</div>
+                                </div>
+                            </div>
+                            <div className="text-right">
+                                <div className="text-[18px] font-black" style={{ color: goodColor, ...F }}>{count}</div>
+                                <div className="text-[10px] text-[#444]" style={F}>{habit.unit}</div>
+                            </div>
+                        </div>
+
+                        {/* Day grid */}
+                        <div className="flex gap-1">
+                            {DAYS.map((day, i) => {
+                                const active = days.has(i);
+                                return (
+                                    <button
+                                        key={i}
+                                        onClick={() => toggle(habit.id, i)}
+                                        className="flex-1 flex flex-col items-center gap-1 active:scale-95 transition-transform"
+                                    >
+                                        <span className="text-[9px] text-[#444]" style={F}>{day}</span>
+                                        <div
+                                            className="w-full aspect-square rounded-lg flex items-center justify-center"
+                                            style={{
+                                                background: active
+                                                    ? (isBad ? '#0A2010' : '#1A2A0A')
+                                                    : '#1C1C1C',
+                                                border: `1.5px solid ${active ? goodColor : '#2A2A2A'}`,
+                                            }}
+                                        >
+                                            {active && (
+                                                <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                                                    <path d="M1 4L3.5 6.5L9 1" stroke={goodColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                                </svg>
+                                            )}
+                                        </div>
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        {/* Progress bar */}
+                        <div className="mt-3 h-1 bg-[#222] rounded-full overflow-hidden">
+                            <div className="h-full rounded-full transition-all" style={{ width: `${(count / 7) * 100}%`, background: goodColor }} />
+                        </div>
+                    </div>
+                );
+            })}
+
+            {/* Tip */}
+            <div className="bg-[#141414] rounded-xl p-4 flex gap-3 items-start border border-[#1A2A1A]">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#C2FF02] flex-shrink-0 mt-1.5" />
+                <div className="text-[12px] text-[#666] leading-relaxed" style={F}>
+                    12 дней без курения — уже <span className="text-[#F5F5F5] font-semibold">сэкономлено ~2 400 ₽</span>. Откладывай эти деньги в копилку?
+                    <button className="block text-[11px] font-bold text-[#C2FF02] mt-1" style={F}>Создать цель →</button>
                 </div>
             </div>
         </div>

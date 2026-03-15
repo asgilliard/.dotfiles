@@ -50,17 +50,7 @@ const BLOBS = [
         color: '#7B5EA7', colorStop: '#3A2A5A',
         gradAngle: '160deg',
         fontSize: 15, amountSize: 11,
-    },
-    {
-        id: 'health',
-        label: 'Здоровье',
-        spent: '2 100 ₽', baseSpent: 2100,
-        // Малый — верхний правый угол
-        cx: 340, cy: 260, rx: 55, ry: 50,
-        color: '#3A7D44', colorStop: '#1A3A1A',
-        gradAngle: '120deg',
-        fontSize: 13, amountSize: 10,
-    },
+    }
 ];
 
 export function Lifestyle() {
