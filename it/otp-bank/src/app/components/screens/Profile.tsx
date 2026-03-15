@@ -23,7 +23,7 @@ export function Profile() {
                 <button className="text-[#555555]" onClick={() => navigate('/')}>
                     <ArrowLeft className="w-5 h-5" />
                 </button>
-                <div className="text-[17px] font-semibold text-[#E8E8E8]" style={{ fontFamily: 'Manrope' }}>
+                <div className="text-[17px] font-semibold text-[#F5F5F5]" style={{ fontFamily: "'Onest', sans-serif" }}>
                     Профиль
                 </div>
                 <div className="w-5" />
@@ -32,14 +32,14 @@ export function Profile() {
             {/* Profile Info */}
             <div className="px-6 mt-8 flex flex-col items-center">
                 <div className="w-20 h-20 rounded-full bg-[#1C1C1C] border-2 border-[#2A2A2A] flex items-center justify-center">
-                    <span className="text-2xl font-semibold text-[#666666]" style={{ fontFamily: 'Manrope' }}>
+                    <span className="text-2xl font-semibold text-[#666666]" style={{ fontFamily: "'Onest', sans-serif" }}>
                         АК
                     </span>
                 </div>
-                <div className="text-[22px] font-semibold text-[#E8E8E8] mt-4" style={{ fontFamily: 'Manrope' }}>
+                <div className="text-[22px] font-semibold text-[#F5F5F5] mt-4" style={{ fontFamily: "'Onest', sans-serif" }}>
                     Александр Ковалёв
                 </div>
-                <div className="text-[13px] text-[#666666] mt-1" style={{ fontFamily: 'Manrope' }}>
+                <div className="text-[13px] text-[#666666] mt-1" style={{ fontFamily: "'Onest', sans-serif" }}>
                     +7 (999) 123-45-67
                 </div>
             </div>
@@ -55,7 +55,7 @@ export function Profile() {
                             className="w-full px-4 py-4 flex items-center gap-3 border-b border-[#1A1A1A] last:border-b-0 hover:bg-[#181818] transition-colors"
                         >
                             <span className="text-xl">{item.icon}</span>
-                            <span className="flex-1 text-left text-[14px] text-[#E8E8E8]" style={{ fontFamily: 'Manrope' }}>
+                            <span className="flex-1 text-left text-[14px] text-[#F5F5F5]" style={{ fontFamily: "'Onest', sans-serif" }}>
                                 {item.label}
                             </span>
                             <ChevronRight className="w-4 h-4 text-[#444444]" />

@@ -7,19 +7,19 @@
     --border-default: #222222;
     --border-subtle: #1A1A1A;
 
-    --text-primary: #E8E8E8;
+    --text-primary: #F5F5F5;
     --text-secondary: #888888;
     --text-muted: #444444;
 
-    --accent-green: #C8F135;
-    --accent-orange: #FF5C1A;
+    --accent-green: #C2FF02;
+    --accent-orange: #FF7D32;
     --accent-red: #E05252;
     --accent-yellow: #F0B429;
     --success: #3A7D44;
 
     /* Typography */
-    --font-display: 'Instrument Serif', serif;
-    --font-ui: 'Manrope', sans-serif;
+    --font-display: 'Onest', sans-serif;
+    --font-ui: 'Onest', sans-serif;
 
     /* Spacing */
     --spacing-1: 4px;
@@ -42,7 +42,7 @@
     }
 
     body {
-        @apply bg-[#0A0A0A] text-[#E8E8E8];
+        @apply bg-[#0A0A0A] text-[#F5F5F5];
         font-family: var(--font-ui);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -62,7 +62,7 @@
     }
 
     input[type="range"]::-webkit-slider-track {
-        background: linear-gradient(to right, #C8F135 0%, #C8F135 var(--value, 50%), #222222 var(--value, 50%), #222222 100%);
+        background: linear-gradient(to right, #C2FF02 0%, #C2FF02 var(--value, 50%), #222222 var(--value, 50%), #222222 100%);
         height: 6px;
         border-radius: 3px;
     }
@@ -79,7 +79,7 @@
         width: 16px;
         height: 16px;
         border-radius: 50%;
-        background: #C8F135;
+        background: #C2FF02;
         cursor: pointer;
         margin-top: -5px;
     }
@@ -88,7 +88,7 @@
         width: 16px;
         height: 16px;
         border-radius: 50%;
-        background: #C8F135;
+        background: #C2FF02;
         cursor: pointer;
         border: none;
     }

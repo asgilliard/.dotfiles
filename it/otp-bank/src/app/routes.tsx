@@ -1,11 +1,14 @@
 import { createBrowserRouter } from "react-router";
 import { Root } from "./components/Root";
 import { Home } from "./components/screens/Home";
+import { Lifestyle } from "./components/screens/Lifestyle";
+import { CategoryPage } from "./components/screens/CategoryPage";
 import { Modes } from "./components/screens/Modes";
 import { Finance } from "./components/screens/Finance";
 import { Profile } from "./components/screens/Profile";
 import { Calendar } from "./components/screens/Calendar";
 import { Notifications } from "./components/screens/Notifications";
+import { Support } from "./components/screens/Support";
 
 export const router = createBrowserRouter([
   {
@@ -13,11 +16,14 @@ export const router = createBrowserRouter([
     Component: Root,
     children: [
       { index: true, Component: Home },
+      { path: "lifestyle", Component: Lifestyle },
+      { path: "category/:id", Component: CategoryPage },
       { path: "modes", Component: Modes },
       { path: "finance", Component: Finance },
       { path: "profile", Component: Profile },
       { path: "calendar", Component: Calendar },
       { path: "notifications", Component: Notifications },
+      { path: "support", Component: Support },
     ],
   },
 ]);

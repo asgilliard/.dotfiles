@@ -63,7 +63,7 @@ export function Notifications() {
         <button className="text-[#555555]" onClick={() => navigate(-1)}>
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <div className="text-[17px] font-semibold text-[#E8E8E8]" style={{ fontFamily: 'Manrope' }}>
+        <div className="text-[17px] font-semibold text-[#F5F5F5]" style={{ fontFamily: "'Onest', sans-serif" }}>
           Уведомления
         </div>
         <div className="w-5" />
@@ -80,21 +80,21 @@ export function Notifications() {
 
 function NotificationCard({ notification }: { notification: Notification }) {
   const borderColors: Record<string, string> = {
-    neutral: '#C8F135',
-    warning: '#FF5C1A',
+    neutral: '#C2FF02',
+    warning: '#FF7D32',
     success: '#3A7D44',
   };
 
   const titleColors: Record<string, string> = {
-    neutral: '#E8E8E8',
-    warning: '#FF5C1A',
+    neutral: '#F5F5F5',
+    warning: '#FF7D32',
     success: '#3A7D44',
   };
 
   const primaryButtonColors: Record<string, { bg: string; text: string }> = {
-    neutral: { bg: '#C8F135', text: '#000000' },
-    warning: { bg: '#FF5C1A', text: '#000000' },
-    success: { bg: '#3A7D44', text: '#E8E8E8' },
+    neutral: { bg: '#C2FF02', text: '#000000' },
+    warning: { bg: '#FF7D32', text: '#000000' },
+    success: { bg: '#3A7D44', text: '#F5F5F5' },
   };
 
   return (
@@ -104,26 +104,26 @@ function NotificationCard({ notification }: { notification: Notification }) {
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">
-          <div className="w-5 h-5 bg-[#C8F135] rounded flex items-center justify-center">
+          <div className="w-5 h-5 bg-[#C2FF02] rounded flex items-center justify-center">
             <span className="text-[10px] font-bold text-[#000000]">О</span>
           </div>
-          <span className="text-[11px] font-medium text-[#666666] uppercase tracking-[0.1em]" style={{ fontFamily: 'Manrope' }}>
+          <span className="text-[11px] font-medium text-[#666666] uppercase tracking-[0.1em]" style={{ fontFamily: "'Onest', sans-serif" }}>
             ОТП Банк
           </span>
         </div>
-        <div className="text-[11px] font-medium text-[#444444] uppercase tracking-[0.1em]" style={{ fontFamily: 'Manrope' }}>
+        <div className="text-[11px] font-medium text-[#444444] uppercase tracking-[0.1em]" style={{ fontFamily: "'Onest', sans-serif" }}>
           {notification.time}
         </div>
       </div>
 
       <div
         className="text-[13px] font-semibold mt-1.5"
-        style={{ fontFamily: 'Manrope', color: titleColors[notification.type] }}
+        style={{ fontFamily: "'Onest', sans-serif", color: titleColors[notification.type] }}
       >
         {notification.title}
       </div>
 
-      <div className="text-[12px] text-[#666666] mt-1 leading-relaxed" style={{ fontFamily: 'Manrope' }}>
+      <div className="text-[12px] text-[#666666] mt-1 leading-relaxed" style={{ fontFamily: "'Onest', sans-serif" }}>
         {notification.body}
       </div>
 
@@ -137,7 +137,7 @@ function NotificationCard({ notification }: { notification: Notification }) {
             <button
               key={actionIndex}
               className="px-3 py-1.5 rounded-lg text-[11px] font-semibold active:scale-[0.97] transition-transform"
-              style={{ backgroundColor: colors.bg, color: colors.text, fontFamily: 'Manrope' }}
+              style={{ backgroundColor: colors.bg, color: colors.text, fontFamily: "'Onest', sans-serif" }}
             >
               {action.label}
             </button>

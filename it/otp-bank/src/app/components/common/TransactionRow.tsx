@@ -22,7 +22,7 @@ export function TransactionRow({
   const amountColor = {
     expense: '#888888',
     income: '#3A7D44',
-    upcoming: '#C8F135',
+    upcoming: '#C2FF02',
   }[type];
 
   return (
@@ -36,7 +36,7 @@ export function TransactionRow({
         {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="text-[13px] font-medium text-[#C0C0C0]">{name}</div>
-          <div className="text-[10px] text-[#444444] mt-0.5" style={{ fontFamily: 'Manrope' }}>
+          <div className="text-[10px] text-[#444444] mt-0.5" style={{ fontFamily: "'Onest', sans-serif" }}>
             {meta}
           </div>
         </div>
@@ -44,7 +44,7 @@ export function TransactionRow({
         {/* Amount */}
         <div
           className="text-[13px] font-semibold"
-          style={{ color: amountColor, fontFamily: 'Manrope' }}
+          style={{ color: amountColor, fontFamily: "'Onest', sans-serif" }}
         >
           {amount}
         </div>
@@ -56,8 +56,8 @@ export function TransactionRow({
           {onPayNow && (
             <button
               onClick={onPayNow}
-              className="text-[11px] font-semibold text-[#C8F135] py-1"
-              style={{ fontFamily: 'Manrope' }}
+              className="text-[11px] font-semibold text-[#C2FF02] py-1"
+              style={{ fontFamily: "'Onest', sans-serif" }}
             >
               Оплатить сейчас
             </button>
@@ -66,7 +66,7 @@ export function TransactionRow({
             <button
               onClick={onEdit}
               className="text-[11px] font-semibold text-[#555555] py-1"
-              style={{ fontFamily: 'Manrope' }}
+              style={{ fontFamily: "'Onest', sans-serif" }}
             >
               Изменить
             </button>
