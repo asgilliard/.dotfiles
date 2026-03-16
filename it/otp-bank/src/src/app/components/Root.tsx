@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router';
-import { Home, Search, MessageCircle, User } from 'lucide-react';
+import { Home, MessageCircle, Target, User } from 'lucide-react';
 
 const F = { fontFamily: "'Onest', sans-serif" };
 
@@ -9,7 +9,8 @@ export function Root() {
   const navigate = useNavigate();
   const [notifCount] = useState(2);
 
-  const hideNav = ['/modes', '/calendar', '/notifications', '/analytics', '/year-summary']
+  // Hide nav on full-screen sub-pages
+  const hideNav = ['/modes', '/calendar', '/notifications']
     .includes(location.pathname)
     || location.pathname.startsWith('/category');
 
@@ -18,6 +19,7 @@ export function Root() {
       <div className={hideNav ? '' : 'pb-[70px]'}>
         <Outlet />
       </div>
+
       {!hideNav && (
         <nav className="fixed bottom-0 left-0 right-0 h-[70px] bg-[#0A0A0A] border-t border-[#161616] z-50">
           <div className="flex items-center h-full max-w-[390px] mx-auto">
@@ -26,21 +28,24 @@ export function Root() {
               <Home className={`w-6 h-6 ${location.pathname === '/' ? 'text-[#C2FF02]' : 'text-[#333]'}`} strokeWidth={1.5} />
             </NavBtn>
 
-            <NavBtn active={false} onClick={() => {}}>
-              <Search className="w-6 h-6 text-[#333]" strokeWidth={1.5} />
+            <NavBtn active={location.pathname === '/lifestyle'} onClick={() => navigate('/lifestyle')}>
+              <Target className={`w-6 h-6 ${location.pathname === '/lifestyle' ? 'text-[#C2FF02]' : 'text-[#333]'}`} strokeWidth={1.5} />
             </NavBtn>
 
-            {/* Центральная — Образ жизни */}
+            {/* Floating center button — Modes */}
             <div className="flex-1 flex justify-center">
               <button
-                onClick={() => navigate('/lifestyle')}
+                onClick={() => navigate('/modes')}
                 className="relative -top-4 w-14 h-14 rounded-full flex items-center justify-center active:scale-95 transition-transform"
                 style={{ background: 'linear-gradient(135deg, #C2FF02 0%, #89BC00 100%)', boxShadow: '0 4px 20px rgba(194,255,2,0.35)' }}
               >
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                  <circle cx="11" cy="6" r="3" fill="#000"/>
-                  <path d="M5 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#000" strokeWidth="1.8" strokeLinecap="round"/>
-                  <path d="M8 13.5l-1.5 3.5M14 13.5l1.5 3.5" stroke="#000" strokeWidth="1.4" strokeLinecap="round"/>
+                <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                  <circle cx="11" cy="11" r="4" fill="#000"/>
+                  <circle cx="11" cy="11" r="8" stroke="#000" strokeWidth="1.5"/>
+                  <line x1="11" y1="0" x2="11" y2="4" stroke="#000" strokeWidth="1.5"/>
+                  <line x1="11" y1="18" x2="11" y2="22" stroke="#000" strokeWidth="1.5"/>
+                  <line x1="0" y1="11" x2="4" y2="11" stroke="#000" strokeWidth="1.5"/>
+                  <line x1="18" y1="11" x2="22" y2="11" stroke="#000" strokeWidth="1.5"/>
                 </svg>
               </button>
             </div>

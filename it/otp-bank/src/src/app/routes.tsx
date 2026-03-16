@@ -2,8 +2,6 @@ import { createBrowserRouter } from "react-router";
 import { Root } from "./components/Root";
 import { Home } from "./components/screens/Home";
 import { Lifestyle } from "./components/screens/Lifestyle";
-import { Analytics } from "./components/screens/Analytics";
-import { YearSummary } from "./components/screens/YearSummary";
 import { CategoryPage } from "./components/screens/CategoryPage";
 import { Modes } from "./components/screens/Modes";
 import { Finance } from "./components/screens/Finance";
@@ -19,8 +17,6 @@ export const router = createBrowserRouter([
     children: [
       { index: true, Component: Home },
       { path: "lifestyle", Component: Lifestyle },
-      { path: "analytics", Component: Analytics },
-      { path: "year-summary", Component: YearSummary },
       { path: "category/:id", Component: CategoryPage },
       { path: "modes", Component: Modes },
       { path: "finance", Component: Finance },

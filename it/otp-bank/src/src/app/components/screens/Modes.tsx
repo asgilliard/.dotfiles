@@ -6,7 +6,7 @@ import { SectionLabel } from '../common/SectionLabel';
 
 const F = { fontFamily: "'Onest', sans-serif" };
 
-type ModeType = 'economy' | 'savings';
+type ModeType = 'economy' | 'savings' | 'analytics' | 'health';
 
 export function Modes() {
     const navigate = useNavigate();
@@ -15,14 +15,15 @@ export function Modes() {
     const modes: { id: ModeType; label: string }[] = [
         { id: 'economy', label: 'Экономия' },
         { id: 'savings', label: 'Накопления' },
-
+        { id: 'analytics', label: 'Анализ' },
+        { id: 'health', label: 'Здоровье' },
     ];
 
     return (
         <div className="max-w-[390px] mx-auto bg-[#0A0A0A] min-h-screen pb-6">
             <StatusBar />
             <div className="h-11 px-6 flex items-center justify-between">
-                <button onClick={() => navigate('/lifestyle')} className="text-[#555555]">
+                <button onClick={() => navigate('/')} className="text-[#555555]">
                     <ArrowLeft className="w-5 h-5" />
                 </button>
                 <div className="text-[17px] font-bold text-[#F5F5F5]" style={F}>Режимы</div>
@@ -45,6 +46,8 @@ export function Modes() {
 
             {activeMode === 'economy' && <EconomyMode />}
             {activeMode === 'savings' && <SavingsMode />}
+            {activeMode === 'analytics' && <AnalyticsMode />}
+            {activeMode === 'health' && <HealthMode />}
         </div>
     );
 }
@@ -201,27 +204,14 @@ function SeasonalMode() {
 }
 
 function PaydayPlanner() {
-    const [logSlider, setLogSlider] = useState(50);
+    const [savingsGoal, setSavingsGoal] = useState(5000);
     const [payday, setPayday] = useState(28);
     const [editingPayday, setEditingPayday] = useState(false);
     const today = 15;
     const daysLeft = payday > today ? payday - today : (31 - today + payday);
-
-    // Логарифмическая шкала: 0→0, 50≈50к, 100→500к
-    const maxSavings = 500000;
-    const savingsGoal = logSlider === 0 ? 0 : Math.round(Math.pow(logSlider / 100, 2) * maxSavings);
     const available = 28600 - 8300 - savingsGoal;
     const perDay = Math.max(0, Math.round(available / daysLeft));
     const perWeek = perDay * 7;
-
-    const avgDailySpend = Math.round((28600 - 8300) / daysLeft * 0.6); // 60% остатка как "норма"
-    const tooTight = perDay > 0 && perDay < avgDailySpend;
-
-    const maxAcceptable = Math.max(0, 28600 - 8300 - avgDailySpend * daysLeft);
-    const setMax = () => {
-        const pct = Math.sqrt(Math.max(0, maxAcceptable) / maxSavings);
-        setLogSlider(Math.round(pct * 100));
-    };
 
     return (
         <div className="mx-6 mt-2 mb-6 bg-[#141414] rounded-2xl p-5">
@@ -252,36 +242,22 @@ function PaydayPlanner() {
             ) : (
                 <div className="text-[12px] text-[#555] mb-4" style={F}>{daysLeft} дней · Зарплата {payday} декабря</div>
             )}
-            <div className="mb-3">
+            <div className="mb-4">
                 <div className="flex justify-between items-center mb-2">
                     <span className="text-[11px] font-medium text-[#444] uppercase tracking-[0.08em]" style={F}>Хочу сохранить</span>
-                    <div className="flex items-center gap-2">
-                        <button onClick={setMax}
-                            className="px-2 py-0.5 bg-[#1A2A0A] rounded-lg text-[10px] font-bold text-[#C2FF02]"
-                            style={F}>Макс</button>
-                        <span className="text-[15px] font-bold text-[#C2FF02]" style={F}>{savingsGoal.toLocaleString()} ₽</span>
-                    </div>
+                    <span className="text-[15px] font-bold text-[#C2FF02]" style={F}>{savingsGoal.toLocaleString()} ₽</span>
                 </div>
-                <input type="range" min={0} max={100} value={logSlider}
-                    onChange={e => setLogSlider(+e.target.value)}
+                <input type="range" min={0} max={15000} step={500} value={savingsGoal} onChange={e => setSavingsGoal(+e.target.value)}
                     className="w-full h-1.5 rounded-full appearance-none bg-[#222] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#C2FF02]" />
-                <div className="flex justify-between text-[9px] text-[#333] mt-1" style={F}>
-                    <span>0</span><span>50к</span><span>200к</span><span>500к</span>
-                </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
-                <div className={`rounded-xl p-3 ${tooTight ? 'bg-[#2A1010]' : 'bg-[#1C1C1C]'}`}>
-                    <div className="text-[10px] text-[#444] uppercase mb-0.5" style={F}>Свободно в день</div>
-                    <div className={`text-[20px] font-bold ${perDay <= 0 || tooTight ? 'text-[#E05252]' : 'text-[#F5F5F5]'}`} style={F}>
-                        {perDay > 0 ? `${perDay.toLocaleString()} ₽` : 'Мало'}
-                    </div>
-                    {tooTight && <div className="text-[9px] text-[#E05252] mt-0.5" style={F}>Ниже среднего расхода</div>}
+                <div className="bg-[#1C1C1C] rounded-xl p-3">
+                    <div className="text-[10px] text-[#444] uppercase mb-1" style={F}>В день</div>
+                    <div className={`text-[20px] font-bold ${perDay > 0 ? 'text-[#F5F5F5]' : 'text-[#E05252]'}`} style={F}>{perDay > 0 ? `${perDay.toLocaleString()} ₽` : 'Мало'}</div>
                 </div>
-                <div className={`rounded-xl p-3 ${tooTight ? 'bg-[#2A1010]' : 'bg-[#1C1C1C]'}`}>
-                    <div className="text-[10px] text-[#444] uppercase mb-0.5" style={F}>Свободно в неделю</div>
-                    <div className={`text-[20px] font-bold ${perWeek <= 0 || tooTight ? 'text-[#E05252]' : 'text-[#F5F5F5]'}`} style={F}>
-                        {perWeek > 0 ? `${perWeek.toLocaleString()} ₽` : 'Мало'}
-                    </div>
+                <div className="bg-[#1C1C1C] rounded-xl p-3">
+                    <div className="text-[10px] text-[#444] uppercase mb-1" style={F}>В неделю</div>
+                    <div className={`text-[20px] font-bold ${perWeek > 0 ? 'text-[#F5F5F5]' : 'text-[#E05252]'}`} style={F}>{perWeek > 0 ? `${perWeek.toLocaleString()} ₽` : 'Мало'}</div>
                 </div>
             </div>
             {perDay <= 0 && <div className="mt-3 text-[12px] text-[#E05252]" style={F}>Слишком высокая цель. Попробуй снизить.</div>}
@@ -317,76 +293,6 @@ function SavingsMode() {
                     <div className="text-[11px] text-[#3A7D44] uppercase tracking-[0.1em] mt-2" style={F}>Начислено: +842 ₽</div>
                 </div>
             </div>
-
-            {/* Автонакопление */}
-            <div className="px-6 mt-6">
-                <AutoSaveSettings />
-            </div>
-        </div>
-    );
-}
-
-function AutoSaveSettings() {
-    const [enabled, setEnabled] = useState(false);
-    const [pct, setPct] = useState(12);
-    const [account, setAccount] = useState<'savings' | 'goal'>('savings');
-    const salary = 85000;
-    const autoAmount = Math.round(salary * pct / 100);
-
-    return (
-        <div className="bg-[#141414] rounded-2xl p-5">
-            <div className="flex items-center justify-between mb-1">
-                <div>
-                    <div className="text-[14px] font-bold text-[#F5F5F5]" style={F}>Автонакопление</div>
-                    <div className="text-[11px] text-[#555] mt-0.5" style={F}>Переводит % с зарплаты сразу при поступлении</div>
-                </div>
-                <button
-                    onClick={() => setEnabled(!enabled)}
-                    className={`w-12 h-6 rounded-full transition-colors relative flex-shrink-0 ${enabled ? 'bg-[#C2FF02]' : 'bg-[#333]'}`}
-                >
-                    <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${enabled ? 'translate-x-7' : 'translate-x-1'}`} />
-                </button>
-            </div>
-
-            {enabled && (
-                <div className="mt-4 space-y-4">
-                    <div>
-                        <div className="flex justify-between items-center mb-2">
-                            <span className="text-[11px] text-[#444] uppercase tracking-[0.08em]" style={F}>Процент от зарплаты</span>
-                            <span className="text-[16px] font-bold text-[#C2FF02]" style={F}>{pct}%</span>
-                        </div>
-                        <input type="range" min={1} max={50} value={pct} onChange={e => setPct(+e.target.value)}
-                            className="w-full h-1.5 rounded-full appearance-none bg-[#222] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#C2FF02]" />
-                        <div className="mt-2 bg-[#1A2A0A] rounded-xl p-3 flex justify-between items-center">
-                            <span className="text-[12px] text-[#888]" style={F}>С каждой зарплаты уйдёт</span>
-                            <span className="text-[15px] font-bold text-[#C2FF02]" style={F}>{autoAmount.toLocaleString()} ₽</span>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div className="text-[11px] text-[#444] uppercase tracking-[0.08em] mb-2" style={F}>Куда переводить</div>
-                        <div className="flex gap-2">
-                            {[
-                                { id: 'savings', label: 'Накопительный счёт', sub: '8.5%' },
-                                { id: 'goal', label: 'На цель', sub: 'Отпуск' },
-                            ].map(opt => (
-                                <button
-                                    key={opt.id}
-                                    onClick={() => setAccount(opt.id as 'savings' | 'goal')}
-                                    className={`flex-1 p-3 rounded-xl text-left transition-colors ${account === opt.id ? 'bg-[#1A2A0A] border border-[#C2FF02]' : 'bg-[#1C1C1C] border border-[#222]'}`}
-                                >
-                                    <div className="text-[11px] font-semibold text-[#F5F5F5]" style={F}>{opt.label}</div>
-                                    <div className="text-[10px] text-[#555] mt-0.5" style={F}>{opt.sub}</div>
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="text-[11px] text-[#3A7D44] bg-[#0A1A0A] rounded-xl p-3" style={F}>
-                        ✓ Перевод произойдёт автоматически в день зарплаты, до первой траты
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
@@ -455,6 +361,310 @@ function GoalCard({ goal }: { goal: { name: string; progress: number; current: n
                             </div>
                         </div>
                     )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+/* ── ANALYTICS ───────────────────────────────── */
+const monthData = [
+    { month: 'Авг', income: 82000, expense: 54000 },
+    { month: 'Сен', income: 85000, expense: 61000 },
+    { month: 'Окт', income: 85000, expense: 58000 },
+    { month: 'Ноя', income: 85000, expense: 64280 },
+    { month: 'Дек', income: 85000, expense: 42000 },
+];
+
+const catData = [
+    { label: 'Продукты', amount: 18200, color: '#C2FF02' },
+    { label: 'Кафе', amount: 12400, color: '#FF7D32' },
+    { label: 'Транспорт', amount: 4500, color: '#F0B429' },
+    { label: 'Спорт', amount: 4500, color: '#3A7D44' },
+    { label: 'Красота', amount: 3200, color: '#9D70C1' },
+    { label: 'Одежда', amount: 2800, color: '#7B5EA7' },
+];
+
+function AnalyticsMode() {
+    const maxVal = Math.max(...monthData.map(d => d.income));
+    const total = catData.reduce((s, c) => s + c.amount, 0);
+
+    return (
+        <div className="mt-6 pb-6 space-y-4 px-6">
+            {/* Bar chart — income vs expense */}
+            <div className="bg-[#141414] rounded-2xl p-4">
+                <div className="text-[14px] font-bold text-[#F5F5F5] mb-3" style={F}>Доходы и расходы</div>
+                <div className="flex items-end gap-2 h-32 mb-3">
+                    {monthData.map((d, i) => {
+                        const incH = Math.round((d.income / maxVal) * 112);
+                        const expH = Math.round((d.expense / maxVal) * 112);
+                        const cur = i === monthData.length - 1;
+                        return (
+                            <div key={d.month} className="flex-1 flex flex-col items-center gap-0.5">
+                                <div className="w-full flex gap-0.5 items-end" style={{ height: '112px' }}>
+                                    <div className="flex-1 rounded-t-sm" style={{ height: incH, background: cur ? '#C2FF02' : '#2A3A0A' }} />
+                                    <div className="flex-1 rounded-t-sm" style={{ height: expH, background: cur ? '#FF7D32' : '#2A1A0A' }} />
+                                </div>
+                                <span className="text-[9px] text-[#444]" style={F}>{d.month}</span>
+                            </div>
+                        );
+                    })}
+                </div>
+                <div className="flex gap-4">
+                    {[{ c: '#C2FF02', l: 'Доходы' }, { c: '#FF7D32', l: 'Расходы' }].map(x => (
+                        <div key={x.l} className="flex items-center gap-1.5">
+                            <div className="w-2.5 h-2.5 rounded-sm" style={{ background: x.c }} />
+                            <span className="text-[11px] text-[#666]" style={F}>{x.l}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Pie chart */}
+            <div className="bg-[#141414] rounded-2xl p-4">
+                <div className="text-[14px] font-bold text-[#F5F5F5] mb-3" style={F}>Структура расходов</div>
+                <div className="flex gap-4 items-center">
+                    <svg width="100" height="100" viewBox="0 0 100 100" className="flex-shrink-0">
+                        {catData.reduce<{ element: React.ReactElement; endAngle: number }[]>((acc, cat, index) => {
+                            const prevAngle = index === 0 ? -90 : acc[index - 1].endAngle;
+                            const sweep = (cat.amount / total) * 360;
+                            const start = prevAngle;
+                            const endAngle = start + sweep;
+
+                            const r = 40; const cx = 50; const cy = 50;
+                            const x1 = cx + r * Math.cos(start * Math.PI / 180);
+                            const y1 = cy + r * Math.sin(start * Math.PI / 180);
+                            const x2 = cx + r * Math.cos(endAngle * Math.PI / 180);
+                            const y2 = cy + r * Math.sin(endAngle * Math.PI / 180);
+
+                            acc.push({
+                                element: (
+                                    <path
+                                        key={cat.label}
+                                        d={`M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${sweep > 180 ? 1 : 0} 1 ${x2} ${y2} Z`}
+                                        fill={cat.color}
+                                        opacity="0.85"
+                                    />
+                                ),
+                                endAngle
+                            });
+
+                            return acc;
+                        }, []).map(item => item.element)}
+                        <circle cx="50" cy="50" r="22" fill="#141414" />
+                    </svg>
+                    <div className="flex-1 space-y-1.5">
+                        {catData.map(cat => (
+                            <div key={cat.label} className="flex items-center justify-between">
+                                <div className="flex items-center gap-1.5">
+                                    <div className="w-2 h-2 rounded-full" style={{ background: cat.color }} />
+                                    <span className="text-[11px] text-[#888]" style={F}>{cat.label}</span>
+                                </div>
+                                <span className="text-[11px] font-semibold text-[#C0C0C0]" style={F}>{Math.round(cat.amount / total * 100)}%</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+/* ── HEALTH ─────────────────────────────────── */
+const HABITS = [
+    { id: 'sport', label: 'Спорт', emoji: '🏋️', type: 'good' as const, points: 10, days: [1, 3, 5] },
+    { id: 'smoking', label: 'Курение', emoji: '🚬', type: 'bad' as const, points: -15, days: [0, 1, 3, 5, 6] },
+    { id: 'alcohol', label: 'Алкоголь', emoji: '🍺', type: 'bad' as const, points: -10, days: [] },
+];
+
+const DAYS_SHORT = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+
+function ScoreCircle({ score, maxScore }: { score: number; maxScore: number }) {
+    const r = 54;
+    const circ = 2 * Math.PI * r;
+    const goodPct = Math.max(0, score) / maxScore;
+    const badPct = Math.max(0, -score) / maxScore;
+    const goodDash = goodPct * circ;
+    const badDash = badPct * circ;
+
+    return (
+        <div className="relative w-36 h-36 flex-shrink-0">
+            <svg width="144" height="144" viewBox="0 0 144 144">
+                {/* track */}
+                <circle cx="72" cy="72" r={r} fill="none" stroke="#222" strokeWidth="10" />
+                {/* good arc */}
+                {goodDash > 0 && (
+                    <circle cx="72" cy="72" r={r} fill="none"
+                        stroke="#C2FF02" strokeWidth="10" strokeLinecap="round"
+                        strokeDasharray={`${goodDash} ${circ}`}
+                        transform="rotate(-90 72 72)"
+                    />
+                )}
+                {/* bad arc — from the end going backwards */}
+                {badDash > 0 && (
+                    <circle cx="72" cy="72" r={r} fill="none"
+                        stroke="#E05252" strokeWidth="10" strokeLinecap="round"
+                        strokeDasharray={`${badDash} ${circ}`}
+                        transform="rotate(90 72 72)"
+                    />
+                )}
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <div className="text-[28px] font-black leading-none" style={{ color: score >= 0 ? '#C2FF02' : '#E05252', fontFamily: "'Onest', sans-serif" }}>
+                    {score > 0 ? '+' : ''}{score}
+                </div>
+                <div className="text-[10px] text-[#555] mt-0.5" style={{ fontFamily: "'Onest', sans-serif" }}>баллов</div>
+            </div>
+        </div>
+    );
+}
+
+function HealthMode() {
+    const [checked, setChecked] = useState<Record<string, Set<number>>>(() =>
+        Object.fromEntries(HABITS.map(h => [h.id, new Set<number>(h.days)]))
+    );
+
+    const toggle = (habitId: string, dayIdx: number) => {
+        setChecked(prev => {
+            const next = new Set(prev[habitId]);
+            if (next.has(dayIdx)) { next.delete(dayIdx); } else { next.add(dayIdx); }
+            return { ...prev, [habitId]: next };
+        });
+    };
+
+    // Score: good habits × points per checked day, bad habits × points per checked day
+    const score = HABITS.reduce((sum, h) => {
+        const activeDays = checked[h.id].size;
+        if (h.type === 'good') return sum + activeDays * h.points;
+        // bad: points per day without habit (7 - checked)
+        return sum + (7 - activeDays) * Math.abs(h.points);
+    }, 0);
+
+    // Max possible score if all good days done and zero bad days
+    const maxScore = HABITS.reduce((sum, h) => {
+        if (h.type === 'good') return sum + 7 * h.points;
+        return sum + 7 * Math.abs(h.points);
+    }, 0);
+
+    const goodHabits = HABITS.filter(h => h.type === 'good');
+    const badHabits = HABITS.filter(h => h.type === 'bad');
+
+    return (
+        <div className="mt-6 pb-6 space-y-4">
+            {/* Score hero */}
+            <div className="mx-6 bg-[#141414] rounded-2xl p-5 flex gap-5 items-center">
+                <ScoreCircle score={score} maxScore={maxScore} />
+                <div className="flex-1">
+                    <div className="text-[14px] font-bold text-[#F5F5F5]" style={F}>Эта неделя</div>
+                    <div className="mt-3 space-y-2">
+                        <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-[#C2FF02]" />
+                            <span className="text-[12px] text-[#888]" style={F}>Полезное</span>
+                            <span className="text-[12px] font-bold text-[#C2FF02] ml-auto" style={F}>
+                                +{HABITS.filter(h => h.type === 'good').reduce((s, h) => s + checked[h.id].size * h.points, 0)}
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-[#E05252]" />
+                            <span className="text-[12px] text-[#888]" style={F}>Вредное</span>
+                            <span className="text-[12px] font-bold text-[#E05252] ml-auto" style={F}>
+                                −{HABITS.filter(h => h.type === 'bad').reduce((s, h) => s + (checked[h.id].size) * Math.abs(h.points), 0)}
+                            </span>
+                        </div>
+                        <div className="h-px bg-[#222] my-1" />
+                        <div className="flex items-center gap-2">
+                            <span className="text-[12px] text-[#555]" style={F}>Итог</span>
+                            <span className="text-[13px] font-bold ml-auto" style={{ color: score >= 0 ? '#C2FF02' : '#E05252', fontFamily: "'Onest', sans-serif" }}>
+                                {score > 0 ? '+' : ''}{score} из {maxScore}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Good habits */}
+            <div className="px-6">
+                <div className="text-[11px] font-medium text-[#444] uppercase tracking-[0.1em] mb-2" style={F}>Полезные привычки</div>
+                <div className="space-y-2">
+                    {goodHabits.map(habit => {
+                        const days = checked[habit.id];
+                        return (
+                            <div key={habit.id} className="bg-[#141414] rounded-xl p-3.5">
+                                <div className="flex items-center justify-between mb-2.5">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-lg">{habit.emoji}</span>
+                                        <span className="text-[13px] font-semibold text-[#C0C0C0]" style={F}>{habit.label}</span>
+                                    </div>
+                                    <span className="text-[12px] font-bold text-[#C2FF02]" style={F}>
+                                        {days.size}×{habit.points} = +{days.size * habit.points}
+                                    </span>
+                                </div>
+                                <div className="flex gap-1">
+                                    {DAYS_SHORT.map((d, i) => {
+                                        const on = days.has(i);
+                                        return (
+                                            <button key={i} onClick={() => toggle(habit.id, i)}
+                                                className="flex-1 flex flex-col items-center gap-1 active:scale-95 transition-transform">
+                                                <span className="text-[9px] text-[#444]" style={F}>{d}</span>
+                                                <div className="w-full aspect-square rounded-lg flex items-center justify-center"
+                                                    style={{ background: on ? '#1A2A0A' : '#1C1C1C', border: `1.5px solid ${on ? '#C2FF02' : '#2A2A2A'}` }}>
+                                                    {on && <svg width="9" height="7" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C2FF02" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                                                </div>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* Bad habits */}
+            <div className="px-6">
+                <div className="text-[11px] font-medium text-[#444] uppercase tracking-[0.1em] mb-2" style={F}>Вредные привычки</div>
+                <div className="text-[11px] text-[#555] mb-2" style={F}>Отмечай дни, когда поддался — баллы снимаются</div>
+                <div className="space-y-2">
+                    {badHabits.map(habit => {
+                        const days = checked[habit.id];
+                        const deducted = days.size * Math.abs(habit.points);
+                        return (
+                            <div key={habit.id} className="bg-[#141414] rounded-xl p-3.5">
+                                <div className="flex items-center justify-between mb-2.5">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-lg">{habit.emoji}</span>
+                                        <span className="text-[13px] font-semibold text-[#C0C0C0]" style={F}>{habit.label}</span>
+                                    </div>
+                                    <span className="text-[12px] font-bold text-[#E05252]" style={F}>
+                                        {deducted > 0 ? `−${deducted}` : '0'} балл.
+                                    </span>
+                                </div>
+                                <div className="flex gap-1">
+                                    {DAYS_SHORT.map((d, i) => {
+                                        const on = days.has(i);
+                                        return (
+                                            <button key={i} onClick={() => toggle(habit.id, i)}
+                                                className="flex-1 flex flex-col items-center gap-1 active:scale-95 transition-transform">
+                                                <span className="text-[9px] text-[#444]" style={F}>{d}</span>
+                                                <div className="w-full aspect-square rounded-lg flex items-center justify-center"
+                                                    style={{ background: on ? '#2A1010' : '#1C1C1C', border: `1.5px solid ${on ? '#E05252' : '#2A2A2A'}` }}>
+                                                    {on && <svg width="9" height="7" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#E05252" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                                                </div>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* Tip */}
+            <div className="mx-6 bg-[#141414] rounded-xl p-4 flex gap-3 items-start border border-[#1A2A1A]">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#C2FF02] flex-shrink-0 mt-1.5" />
+                <div className="text-[12px] text-[#666] leading-relaxed" style={F}>
+                    Без сигарет 12 дней — <span className="text-[#F5F5F5] font-semibold">сэкономлено ~2 400 ₽</span>.
                 </div>
             </div>
         </div>
