@@ -1,5 +1,26 @@
 // Zed settings
 {
+    "cli_default_open_behavior": "new_window",
+    "agent_servers": {
+        "github-copilot-cli": {
+            "type": "registry"
+        }
+    },
+    "restore_on_startup": "launchpad",
+    "session": {
+        "trust_all_worktrees": true
+    },
+    "project_panel": {
+        "dock": "left"
+    },
+    "outline_panel": {
+        "dock": "left"
+    },
+    "git_panel": {
+        "dock": "left"
+    },
+    "disable_ai": true,
+    "helix_mode": false,
     "minimap": {
         "show": "always"
     },
@@ -11,27 +32,41 @@
     "selection_highlight": false,
     "cursor_shape": "bar",
     "agent": {
+        "dock": "right",
         "default_model": {
-            "provider": "zed.dev",
-            "model": "claude-sonnet-4"
+            "effort": "high",
+            "enable_thinking": true,
+            "provider": "copilot_chat",
+            "model": "gpt-5-mini"
         },
         "model_parameters": []
     },
     "language_models": {
         "ollama": {
             "api_url": "http://localhost:11434"
+        },
+        "open_router": {
+            "available_models": [
+                {
+                    "name": "stepfun/step-3.5-flash:free",
+                    "display_name": "Step 3.5 Flash (free)",
+                    "max_tokens": 262144
+                }
+            ]
         }
     },
     "edit_predictions": {
-        "mode": "eager",
-        "copilot": {
-            "proxy": null,
-            "proxy_no_verify": null
+        "ollama": {
+            "prompt_format": "qwen",
+            "model": "tinyllama:latest"
         },
-        "enabled_in_text_threads": false
-    },
-    "features": {
-        "edit_prediction_provider": "zed"
+        "provider": "zed",
+        "open_ai_compatible_api": {
+            "api_url": "https://openrouter.ai/api/v1/chat/completions",
+            "model": "qwen/qwen3-coder:free",
+            "prompt_format": "qwen",
+            "max_output_tokens": 65536
+        }
     },
     "vim_mode": false,
     "telemetry": {
@@ -44,18 +79,18 @@
     "buffer_font_size": 14,
     "ui_font_size": 14,
     "theme": {
-        "mode": "system",
+        "mode": "dark",
         "light": "Tokyo Night Light",
-        "dark": "Rosé Pine"
+        "dark": "Gruvbox Material"
     },
     "soft_wrap": "editor_width",
     "hover_popover_enabled": true,
-    "hover_popover_delay": 70,
+    "hover_popover_delay": 300,
     "use_system_path_prompts": false,
     "use_system_prompts": false,
     "show_completions_on_input": true,
     "show_completion_documentation": false,
-    "show_edit_predictions": false,
+    "show_edit_predictions": true,
     "format_on_save": "on",
     "formatter": "language_server",
     "auto_signature_help": false,
@@ -82,12 +117,13 @@
         "enabled": false
     },
     "collaboration_panel": {
+        "dock": "left",
         "button": false
     },
     "notification_panel": {
         "button": false
     },
-    "auto_update": false,
+    "auto_update": true,
     "terminal": {
         "env": {
             "TERM_PROGRAM": "zed"

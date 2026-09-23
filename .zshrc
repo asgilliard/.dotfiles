@@ -6,7 +6,13 @@ zcomet load zsh-users/zsh-autosuggestions
 zcomet load zsh-users/zsh-syntax-highlighting  
 
 # Paths
+export GOROOT="/usr/local/go"
+export GOPATH="$HOME/go"
 export PATH="\
+$GOROOT/bin:\
+$GOPATH/bin:\
+/opt/local/libexec/qt6/bin:\
+$HOME/platform-tools:\
 $HOME/.cargo/bin:\
 $HOME/.local/bin:\
 /opt/local/bin:\
@@ -20,9 +26,6 @@ $HOME/.local/bin:\
 /sbin:\
 /opt/X12/bin"
 
-# starship prompt
-eval "$(starship init zsh)"
-
 # Locales
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -30,7 +33,6 @@ export LC_ALL=en_US.UTF-8
 # Aliases
 alias la='ls -lA'
 alias ls="eza --tree --level=1 --icons=always"
-
 alias cd='z'
 alias helix='hx'
 
@@ -47,8 +49,33 @@ setopt hist_verify
 bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
 
-# zoxide
+# Fast init via eval cache / async
+eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 
-# complete initialisation
+# zcomet compinit
 zcomet compinit
+
+# Lazy load for NVM (подгружается только при первом вызове nvm/node/npm)
+export NVM_DIR="$HOME/.nvm"
+if [ -s "$NVM_DIR/nvm.sh" ]; then
+  nvm() {
+    unset -f nvm node npm npx
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    nvm "$@"
+  }
+  node() { nvm; node "$@"; }
+  npm()  { nvm; npm "$@"; }
+  npx()  { nvm; npx "$@"; }
+fi
+
+fix1251() {
+  local dir="${1:-.}"
+  find "$dir" -type f -name "*.txt" -exec sh -c '
+    for f; do
+      iconv -f cp1251 -t utf-8 "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+    done
+  ' sh {} +
+  echo "Done"
+}
